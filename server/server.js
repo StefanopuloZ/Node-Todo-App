@@ -22,15 +22,34 @@ app.post('/todos', (req, res) => {
 
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
-        res.send({todos})
+        res.send({todos});
     }, (err) => {
         res.status(400).send(err);
-    })
-})
+    });
+});
+
+app.post('/users', (req, res) => {
+    let user = new User({
+        email: req.body.email
+    });
+    user.save().then((doc) => {
+        res.send(doc);
+    }, (err) => {
+        res.status(400).send(err);
+    });
+});
+
+app.get('/users', (req, res) => {
+    User.find().then((users) => {
+        res.send({users});
+    }, (err) => {
+        res.status(400).send(err);
+    });
+});
 
 app.listen(3000, () => {
     console.log('Started listenning on port 3000');
-})
+});
 
 module.exports = {app};
 
