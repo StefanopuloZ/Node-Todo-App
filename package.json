@@ -8,6 +8,9 @@
     "start": "node server/server.js",
     "startmon": "nodemon --exec npm start"
   },
+  "engines": {
+    "node": "10.14.0"
+  },
   "author": "",
   "license": "ISC",
   "keywords": [],
