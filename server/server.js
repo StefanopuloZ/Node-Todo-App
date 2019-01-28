@@ -12,6 +12,11 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+    res.send(`build in progress. go to "/todos" to list all todos from db.
+    "/users" for users. Use /todos/:id or /users/:id to fetch by id.)`);
+});
+
 app.post('/todos', (req, res) => {
     let todo = new Todo({
         text: req.body.text
