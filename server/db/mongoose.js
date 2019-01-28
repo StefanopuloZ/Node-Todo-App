@@ -1,8 +1,8 @@
 let mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp',{ useNewUrlParser: true });
-// mongoose.connect('mongodb://admin:123456a@ds113454.mlab.com:13454/todoapp',{ useNewUrlParser: true });
+// mongoose.connect('mongodb://localhost:27017/TodoApp',{ useNewUrlParser: true });
+mongoose.connect('mongodb://admin:123456a@ds113454.mlab.com:13454/todoapp',{ useNewUrlParser: true });
 
 //mongodb://<dbuser>:<dbpassword>@ds113454.mlab.com:13454/todoapp
 module.exports = {
