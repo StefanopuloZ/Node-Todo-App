@@ -36,6 +36,66 @@ app.get('/todos', (req, res) => {
     });
 });
 
+app.get('/todos/:id', (req, res) => {
+    let id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    };
+
+    Todo.findById(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send();
+        };
+
+        res.send({ todo });
+    }).catch((err) => {
+        res.status(400).send();
+    });
+});
+
+app.delete('/todos/:id', (req, res) => {
+    let id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send('Not a valid ID');
+    };
+
+    Todo.findByIdAndDelete(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send(todo);
+        };
+        res.send(todo);
+    }).catch((err) => {
+        res.status(400).send();
+    });
+});
+
+app.patch('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['text', 'completed']);
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    };
+
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completedAt = null;
+    };
+
+    Todo.findByIdAndUpdate(id, { $set: body }, { new: true }).then((todo) => {
+        if (!todo) {
+            res.status(404).send();
+        };
+
+        res.send({ todo });
+    }).catch((err) => {
+        res.status(400).send();
+    });
+});
+
 app.post('/users', (req, res) => {
     let user = new User({
         email: req.body.email
@@ -67,46 +127,13 @@ app.get('/users/:id', (req, res) => {
             return res.status(404).send();
         };
 
-        res.send({user});
+        res.send({ user });
     }).catch((err) => {
         res.status(400).send();
     });
 });
 
-app.get('/todos/:id', (req, res) => {
-    let id = req.params.id;
 
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
-    };
-
-    Todo.findById(id).then((todo) => {
-        if (!todo) {
-            return res.status(404).send();
-        };
-
-        res.send({todo});
-    }).catch((err) => {
-        res.status(400).send();
-    });
-});
-
-app.delete('/todos/:id', (req, res) => {
-    let id = req.params.id;
-
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send('Not a valid ID');
-    };
-
-    Todo.findByIdAndDelete(id).then((todo) => {
-        if (!todo) {
-            return res.status(404).send(todo);
-        };
-        res.send(todo);
-    }).catch((err) => {
-        res.status(400).send();
-    });
-});
 
 app.listen(port, () => {
     console.log(`Started listenning on port ${port}`);
