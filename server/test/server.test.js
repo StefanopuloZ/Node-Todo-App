@@ -9,7 +9,9 @@ const { User } = require('../models/user');
 const todos = [
   {
     _id: new ObjectID(),
-    text: "First test todo"
+    text: "First test todo",
+    completed: true,
+    completedAt: 123
   },
   {
     _id: new ObjectID(),
@@ -212,6 +214,58 @@ describe('DELETE /todos/:id', () => {
       .expect(404)
       .end(done);
   });
+});
+
+describe('PATCH /todos/:id', () => {
+  it('should update the todo', (done) => {
+    let testId = todos[0]._id.toHexString();
+
+    request(app)
+      .patch(`/todos/${testId}`)
+      .send({
+        completed: true,
+        text: 'test text'
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.completed).toBe(true);
+        expect(res.body.todo.text).toBe('test text');
+        expect(typeof res.body.todo.completedAt).toBe('number');
+      })
+      .end(done);
+  });
+
+  it('should clear completedAt when todo is completed', (done) => {
+    let testId = todos[0]._id.toHexString();
+
+    request(app)
+      .patch(`/todos/${testId}`)
+      .send({
+        completed: false
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.completedAt).toBe(null);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if id is invalid', (done) => {
+    request(app)
+      .patch(`/todos/123`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    let testId = new ObjectID().toHexString();
+
+    request(app)
+      .patch(`/todos/${testId}`)
+      .expect(404)
+      .end(done);
+  });
+
 });
 
 
