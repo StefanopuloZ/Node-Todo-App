@@ -8,6 +8,7 @@ const _ = require('lodash');
 let { mongoose } = require('./db/mongoose');
 let { Todo } = require('./models/todo');
 let { User } = require('./models/user');
+let { authenticate } = require('./middleware/authenticate');
 
 let app = express();
 const port = process.env.PORT;
@@ -122,7 +123,7 @@ app.post('/users', (req, res) => {
     }).then((token) => {
         res.header('x-auth', token).send(user);
     }).catch((err) => {
-        res.status(400).send();
+        res.status(400).send(err);
     });
 });
 
@@ -134,22 +135,26 @@ app.get('/users', (req, res) => {
     });
 });
 
-app.get('/users/:id', (req, res) => {
-    let id = req.params.id;
+// app.get('/users/:id', (req, res) => {
+//     let id = req.params.id;
 
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
-    };
+//     if (!ObjectID.isValid(id)) {
+//         return res.status(404).send();
+//     };
 
-    User.findById(id).then((user) => {
-        if (!user) {
-            return res.status(404).send();
-        };
+//     User.findById(id).then((user) => {
+//         if (!user) {
+//             return res.status(404).send();
+//         };
 
-        res.send({ user });
-    }).catch((err) => {
-        res.status(400).send();
-    });
+//         res.send({ user });
+//     }).catch((err) => {
+//         res.status(400).send();
+//     });
+// });
+
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 
