@@ -5,47 +5,10 @@ const { ObjectID } = require('mongodb');
 const { app } = require('../server');
 const { Todo } = require('../models/todo');
 const { User } = require('../models/user');
+const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
 
-const todos = [
-  {
-    _id: new ObjectID(),
-    text: "First test todo",
-    completed: true,
-    completedAt: 123
-  },
-  {
-    _id: new ObjectID(),
-    text: "Second test todo"
-  },
-  {
-    _id: new ObjectID(),
-    text: "Third test todo"
-  }
-];
-
-const users = [
-  {
-    _id: new ObjectID(),
-    email: "first-test@email.com",
-    password: '12345678'
-  },
-  {
-    _id: new ObjectID(),
-    email: "second-test@email.com",
-    password: '12345678'
-  },
-  {
-    _id: new ObjectID(),
-    email: "third-test@email.com",
-    password: '12345678'
-  }
-];
-
-beforeEach((done) => {
-  Todo.deleteMany({}).then(() => {
-    Todo.insertMany(todos).then(() => done());
-  });
-});
+beforeEach(populateTodos);
+beforeEach(populateUsers);
 
 describe('POST /todos', () => {
   it('should create a new todo', (done) => {
