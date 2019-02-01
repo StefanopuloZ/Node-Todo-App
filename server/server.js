@@ -16,8 +16,8 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.send(`build in progress. go to "/todos" to list all todos from db.
-    "/users" for users. Use /todos/:id or /users/:id to fetch by id.)`);
+    res.send(`Node todo app is online. Go to https://github.com/StefanopuloZ/node-todo-api
+    for code review.`);
 });
 
 ///////////////// Todos routes ///////////////////////////
