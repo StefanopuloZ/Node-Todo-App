@@ -147,23 +147,13 @@ app.get('/users', (req, res) => {
     });
 });
 
-// app.get('/users/:id', (req, res) => {
-//     let id = req.params.id;
-
-//     if (!ObjectID.isValid(id)) {
-//         return res.status(404).send();
-//     };
-
-//     User.findById(id).then((user) => {
-//         if (!user) {
-//             return res.status(404).send();
-//         };
-
-//         res.send({ user });
-//     }).catch((err) => {
-//         res.status(400).send();
-//     });
-// });
+app.delete('/users/me/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send();
+    }, () => {
+        res.status(400).send();
+    });
+});
 
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
