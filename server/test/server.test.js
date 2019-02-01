@@ -211,12 +211,12 @@ describe('PATCH /todos/:id', () => {
         text: 'test text'
       })
       .expect(404)
-      .expect((res) => {
-        expect(res.body.todo.completed).toBe(true);
-        expect(res.body.todo.text).toBe('First test todo');
-        expect(res.body.todo.completedAt).toBe(123);
-      })
-      .end(done);
+      .end((err, res) => {
+        Todo.findById(testId).then((todo) => {
+          expect(todo).toBeTruthy();
+          done();
+        }).catch((err) => done());
+      });
   });
 
   it('should clear completedAt when todo is completed', (done) => {
