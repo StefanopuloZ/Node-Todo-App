@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
+var cookieParser = require('cookie-parser')
 
 let { mongoose } = require('./db/mongoose');
 let { Todo } = require('./models/todo');
@@ -14,6 +15,7 @@ let app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
     res.send(`Node todo app is online. Go to https://github.com/StefanopuloZ/node-todo-api
